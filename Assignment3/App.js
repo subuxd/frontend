@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./Assignment3.css";
+import "./App.css";
 import logo from "./logo.png";
 import userIcon from "./usericon.png";
 
