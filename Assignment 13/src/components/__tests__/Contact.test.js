@@ -1,59 +1,59 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
-import RestaurantMenu from "../RestaurantMenu";
-import MOCK_DATA from "../mocks/mockResMenu.json";
-import { Provider } from "react-redux";
-import appStore from "../../utils/appStore";
-import Header from "../Header";
-import { BrowserRouter } from "react-router-dom";
+import { render, screen } from "@testing-library/react";
+import Contact from "../Contact";
 import "@testing-library/jest-dom";
-import Cart from "../Cart";
 
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    json: () => Promise.resolve(MOCK_DATA),
-  })
-);
+// describe is used to group together multiple test cases
+// it and test both are same thing it is just alias of test
+describe("Contact Us Page Test Case", () => {
+  // beforeAll(() => {
+  //   console.log("Before All");
+  // });
 
-it("Should Load Restaurant Menu Component", async () => {
-  await act(async () =>
-    render(
-      <BrowserRouter>
-        <Provider store={appStore}>
-          <Header />
-          <RestaurantMenu />
-          <Cart />
-        </Provider>
-      </BrowserRouter>
-    )
-  );
+  // beforeEach(() => {
+  //   console.log("Before Each");
+  // });
 
-  const accordionHeader = screen.getByText("Andhra Badshah Biryani (6)");
+  // afterAll(() => {
+  //   console.log("After All");
+  // });
 
-  fireEvent.click(accordionHeader);
+  // afterEach(() => {
+  //   console.log("After Each");
+  // });
 
-  expect(screen.getAllByTestId("foodItems").length).toBe(6);
+  test("Should load contact us component", () => {
+    render(<Contact />); //this Contact page component will be rendered on the jsdom
 
-  //till above my accordion is open
-  //and now we will test if the add to cart button is working fine or not
+    //   Querying
+    const heading = screen.getByRole("heading"); //now we can test by checking if we get the correct heading or not when we render the component
 
-  const addBtns = screen.getAllByRole("button", { name: "Add +" });
-  fireEvent.click(addBtns[0]);
+    //Assertion
+    expect(heading).toBeInTheDocument();
+  });
 
-  expect(screen.getByText("Cart (1 items)")).toBeInTheDocument();
+  test("Should load button inside contact component", () => {
+    render(<Contact />);
 
-  //another test case when cart already has 1 item and we are adding another item
-  fireEvent.click(addBtns[1]);
-  expect(screen.getByText("Cart (2 items)")).toBeInTheDocument();
+    const button = screen.getByRole("button");
 
-  expect(screen.getAllByTestId("foodItems").length).toBe(8);
+    expect(button).toBeInTheDocument();
+  });
 
-  //now we will write the test case for clear cart
-  fireEvent.click(screen.getByRole("button", { name: "Clear Cart" }));
+  it("Should load input name inside contact component", () => {
+    render(<Contact />);
 
-  expect(screen.getAllByTestId("foodItems").length).toBe(6);
+    const inputName = screen.getByPlaceholderText("name");
 
-  expect(
-    screen.getByText("Cart is empty. Add items to the cart!")
-  ).toBeInTheDocument();
+    expect(inputName).toBeInTheDocument();
+  });
+
+  it("Should load 2 input boxes on the contact component", () => {
+    render(<Contact />);
+
+    const inputBoxes = screen.getAllByRole("textbox");
+
+    //   console.log(inputBoxes);
+
+    expect(inputBoxes.length).toBe(2);
+  });
 });
